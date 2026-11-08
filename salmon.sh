@@ -26,17 +26,17 @@ counts_dir=/home/ighalok/projects/def-idworkin/ighalok/igernasoc/salmoncounts
 # Build sorted list of R1 files, pick the one matching this array task
 files=(${trim_dir}/*_R1_trimmed.fastq.gz)
 file=${files[$((SLURM_ARRAY_TASK_ID - 1))]}
- 
+
 if [ -z "${file}" ] || [ ! -f "${file}" ]; then
     echo "No file for array task ${SLURM_ARRAY_TASK_ID}; array range is larger than the number of samples."
     exit 1
 fi
- 
-sample_name=$(basename "${file}" _R1_PE.fastq.gz)
+
+sample_name=$(basename "${file}" _R1_trimmed.fastq.gz)
 out_dir=${counts_dir}/${sample_name}_quant
- 
+
 echo "Task ${SLURM_ARRAY_TASK_ID}: sample ${sample_name}"
- 
+
 salmon quant -i "${index_dir}" -l A \
     -1 "${trim_dir}/${sample_name}_R1_trimmed.fastq.gz" \
     -2 "${trim_dir}/${sample_name}_R2_trimmed.fastq.gz" \
